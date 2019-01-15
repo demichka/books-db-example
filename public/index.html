@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 shrink-to-fit=no >
+    <title>Ajax example</title>
+    <link rel="
+        stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css"
+        integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9"
+        crossorigin="anonymous"></script>
+    <script src="books.js"></script>
+    <script src="main.js" defer></script>
+</head>
+
+<body>
+    <main class="container">
+
+        <div class="row justify-content-center mb-5">
+            <div class="col-12">
+                <h1 class="m-3 text-center">Welcome to the library!</h1>
+            </div>
+            <div class="col-12 text-center">
+                <button type="button" class="btn btn-raised btn-primary get-books">Get books</button>
+                <button type="button" class="btn btn-raised btn-success add-book" data-toggle="modal" data-target="#form-modal" data-event="addBook">Add
+                    book</button>
+                <button type="button" class="btn btn-raised btn-info search-book">Search book</button>
+
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="books-wrap col-8 "></div>
+        </div>
+
+    </main>
+    <div id="form-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <h4 class="book-title"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="new-author">Author</label>
+                            <input type="text" maxlength="30" class="form-control" id="new-author" placeholder="Enter author"
+                                name="new-author" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-title">Title</label>
+                            <input type="text" maxlength="40" class="form-control" id="new-title" placeholder="Enter title"
+                                name="new-title" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-country">Country</label>
+                            <input type="text" maxlength="15" class="form-control" id="new-country" placeholder="Enter country"
+                                name="new-country">
+                        </div>
+                        <div class="form-group">
+                            <label for="new-lang">Language</label>
+                            <input type="text" maxlength="20" class="form-control" id="new-lang" placeholder="Enter language"
+                                name="new-language">
+                        </div>
+                        <div class="form-group">
+                            <label for="new-year">Year</label>
+                            <input type="number" maxlength="4" class="form-control" id="new-year" placeholder="Enter year"
+                                name="new-year">
+                        </div>
+                        <div class="form-group">
+                            <label for="new-image-link">Image</label>
+                            <input type="text" class="form-control" id="new-image-link" placeholder="Enter image link"
+                                name="new-image-link">
+                        </div>
+                        <div class="form-group">
+                            <label for="new-about-link">Link about book</label>
+                            <input type="text" class="form-control" id="new-about-link" placeholder="Enter link about book"
+                                name="new-about-link">
+                        </div>
+                        <div class="form-group">
+                            <label for="new-book-pages">Pages</label>
+                            <input type="number" maxlength="5" class="form-control" id="new-book-pages" placeholder="Enter book pages"
+                                name="new-book-pages">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="create-book-btn" class="btn  btn-outline-primary">Add book</button>
+                    <button type="button" id="save-updates-btn" class="btn btn-outline-primary">Update book</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="update-book-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Book</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="upd-author">Author</label>
+                            <input type="text" maxlength="30" class="form-control" id="upd-author" placeholder="Update author"
+                                name="upd-author" required>
+                        </div>
+                        
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="create-book-btn" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
