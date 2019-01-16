@@ -2,26 +2,31 @@ $(document).ready(function () {
     $('body').bootstrapMaterialDesign();
 });
 
+let createBookMarkup = (book) => {
+    let item = $('<div class="row book-item border border-primary mb-2 p-2"/>');
+    let div = $('<div class="col-sm-8"/>');
+    div.append($('<h3 />').html(book.author));
+    div.append($('<h4 />').html(book.title));
+    div.append($('<p />').html('Year: ' + book.year));
+    div.append($('<p />').html('Country: ' + book.country));
+    div.append($('<p />').html('Language: ' + book.language));
+    div.append($('<p />').html('Pages: ' + book.pages));
+    div.append($('<p />').append($('<a href="' + book.link + '" ' + 'title="' + book.title + ' by ' + book.author + ' "target="_blank">Learn more</a>')));
+    item.append(div);
+    item.append($('<div class="col-sm-4"/>').append($('<img src="/book-images/' + book.image + '" class="mw-100 h-auto" />')));
+    let removeBtn = $('<button class="btn btn-raised btn-secondary delete-book mr-1" type="button" data-id="' + book._id + '">Delete</button>');
+    let updateBtn = $('<button class="btn btn-raised btn-warning update-book" type="button" data-event="updateBook" data-id="' + book._id + '">Update</button>');
+    item.append(removeBtn);
+    item.append(updateBtn);
+    return item;
+}
+
 $('.get-books').click(async () => {
     let books = await getBooks();
     $('.books-wrap').empty();
     let listBooks = $('<div class="book-list" />');
     for (let book of books) {
-        let item = $('<div class="row book-item border border-primary mb-2 p-2"/>');
-        let div = $('<div class="col-sm-8"/>');
-        div.append($('<h3 />').html(book.author));
-        div.append($('<h4 />').html(book.title));
-        div.append($('<p />').html('Year: ' + book.year));
-        div.append($('<p />').html('Country: ' + book.country));
-        div.append($('<p />').html('Language: ' + book.language));
-        div.append($('<p />').html('Pages: ' + book.pages));
-        div.append($('<p />').append($('<a href="' + book.link + '" ' + 'title="' + book.title + ' by ' + book.author + ' "target="_blank">Learn more</a>')));
-        item.append(div);
-        item.append($('<div class="col-sm-4"/>').append($('<img src="/book-images/' + book.image + '" class="mw-100 h-auto" />')));
-        let removeBtn = $('<button class="btn btn-raised btn-secondary delete-book mr-1" type="button" data-id="' + book._id + '">Delete</button>');
-        let updateBtn = $('<button class="btn btn-raised btn-warning update-book" type="button" data-event="updateBook" data-id="' + book._id + '">Update</button>');
-        item.append(removeBtn);
-        item.append(updateBtn);
+        let item = createBookMarkup(book);
         listBooks.append(item);
 
     }
@@ -70,7 +75,7 @@ $('#form-modal').on('show.bs.modal', function (e) {
     let btn = $(e.relatedTarget);
     let action = btn.data('event');
     let modalTitle = $(this).find('.modal-title').empty();
-    let btns = $(this).find($('button'));
+    let btns = $(this).find($('.modal-footer').find('button'));
     btns.hide();
     if (action === 'addBook') {
         modalTitle.html('Add new book');
@@ -88,9 +93,10 @@ $('#create-book-btn').click(function () {
 
 $('.books-wrap').on('click', '.update-book', async (e) => {
     let id = $(e.target).data('id');
-    let book = await getBook(id);
+    let book = await getBookById(id);
+    console.log(book);
     let modal = openUpdateModal(id);
-    fillUpdateFormFromDb(book, modal);
+    fillUpdateFormFromDb(book[0], modal);
 });
 
 function openUpdateModal(id) {
@@ -119,7 +125,6 @@ function fillUpdateFormFromDb(book, modal) {
 $('#save-updates-btn').on('click', async (e) => {
     let btn = $(e.target);
     let form = btn.parents('.modal').find('form');
-    console.log(form);
     let id = btn.data('id');
     let book = submitBookForm(form);
     console.log(book);
@@ -140,6 +145,7 @@ $('#srch-type-select').change(function () {
         case 'srch-id':
         case 'srch-author':
         case 'srch-title':
+        case 'srch-country':
             form.find('.form-group').hide();
             form.find('.simple-srch').slideDown();
             break;
@@ -148,13 +154,103 @@ $('#srch-type-select').change(function () {
             form.find('.form-group').hide();
             form.find('.interval-srch').slideDown();
             break;
-            case 'srch-minAge':
-            case 'srch-maxAge':
+        case 'srch-minAge':
+        case 'srch-maxAge':
             form.find('.form-group').hide();
             form.find('.numeric-srch').slideDown();
             break;
         default:
             break;
     }
+});
+
+let processSearch = (type, value) => {
+    let book = {};
+    switch (type) {
+        case 'srch-id':
+            book = getBookById(value[0]);
+            break;
+        case 'srch-author':
+            book = getBookByAuthor(value);
+            break;
+        case 'srch-title':
+            book = getBookByTitle(value);
+            break;
+        case 'srch-country':
+            book = getBookByCountry(value);
+            break;
+        case 'srch-year':
+            book = getBookByYear(value);
+            break;
+        case 'srch-pages':
+            book = getBookByPages(value);
+            break;
+        case 'srch-minAge':
+            book = getBookByMinAge(value);
+            break;
+        case 'srch-maxAge':
+            book = getBookByMaxAge(value);
+            break;
+        default:
+            {
+                return;
+            }
+    }
+    return book;
+};
+
+$('.srch-btn').on('click', async (e) => {
+    let btn = $(e.target);
+    let form = btn.parents('form');
+    let type = form.find('option:selected').val();
+    let value = [];
+    if (type === 'srch-id' ||
+        type === 'srch-author' ||
+        type === 'srch-title' ||
+        type === 'srch-country'
+    ) {
+        let key = $('#srch-input').val();
+        await value.push(key);
+    }
+    if (type === 'srch-year' ||
+        type === 'srch-pages'
+    ) {
+        let minVal = $('#srch-minVal').val();
+        let maxVal = $('#srch-maxVal').val();
+        value = {
+            minVal: minVal,
+            maxVal: maxVal
+        };
+    }
+    if (type === 'srch-minAge' ||
+        type === 'srch-maxAge'
+    ) {
+        let key = $('#numeric-input').val();
+        value.push(key);
+    }
+
+    let books = await processSearch(type, value);
+    if (books.length > 0) {
+        $('.books-wrap').empty();
+        for (let i = 0; i < books.length; i++) {
+            let book = books[i];
+            let bookHtml = createBookMarkup(book);
+            $('.books-wrap').append(bookHtml);
+        }
+        form[0].reset();
+        value.length = 0;
+        form.find('.form-group').hide();
+        btn.parents('.modal').modal('hide');
+    } else {
+        let alert = form.find('.alert');
+        alert.fadeIn();
+        form[0].reset();
+        form.find('.form-group').slideUp();
+        setTimeout(() => {
+            alert.slideUp();
+        }, 2000);
+
+    }
+    //5c387c7ceb2bc8092048b528
 
 });

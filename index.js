@@ -35,7 +35,7 @@ function startWebServer() {
     });
 
     app.get('/json/books/id/:id', async (req, res) => {
-        let book = await Book.findOne({
+        let book = await Book.find({
             _id: req.params.id
         }).catch((err) => {
             // Catching here to prevent server crash
@@ -111,8 +111,9 @@ function startWebServer() {
     });
 
     app.get('/json/books/country/:country', async (req, res) => {
+        let variant = new RegExp(req.params.country, 'i');
         let books = await Book.find({
-            country: req.params.country
+            country: variant
         }).catch((err) => {
             res.json({
                 error: err

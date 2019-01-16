@@ -31,7 +31,8 @@
                 <button type="button" class="btn btn-raised btn-success add-book" data-toggle="modal" data-target="#form-modal"
                     data-event="addBook">Add
                     book</button>
-                <button type="button" class="btn btn-raised btn-info search-book" data-toggle="modal" data-target="#search-modal">Search book</button>
+                <button type="button" class="btn btn-raised btn-info search-book" data-toggle="modal" data-target="#search-modal">Search
+                    book</button>
 
             </div>
         </div>
@@ -123,35 +124,40 @@
                             <option value="srch-minAge">minAge</option>
                             <option value="srch-maxAge">maxAge</option>
                         </select>
+                        <div class="alert alert-danger" role="alert" style="display: none;">
+                            Nothing founds! Enter another query.
+                        </div>
                         <div class="form-group simple-srch" style="display: none;">
                             <div class="input-group">
                                 <input type="text" maxlength="50" class="form-control" id="srch-input" placeholder="Enter query here"
-                                    name="srch-input" required>
+                                    name="srch-input" required autofocus>
 
                                 <div class="input-group-prepend">
-                                    <button class="btn btn-outline-secondary" type="button">Go!</button>
+                                    <button class="btn btn-outline-secondary srch-btn" type="button">Go!</button>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group numeric-srch" style="display: none;">
-                                <div class="input-group">
-                                    <input type="number" maxlength="5" class="form-control" id="numeric-input" placeholder="Enter number"
-                                        name="numeric-input" required>
-    
-                                    <div class="input-group-prepend">
-                                        <button class="btn btn-outline-secondary" type="button">Go!</button>
-                                    </div>
+                            <div class="input-group">
+                                <input type="number" maxlength="5" class="form-control" id="numeric-input" placeholder="Enter number"
+                                    name="numeric-input" required autofocus>
+
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-outline-secondary srch-btn" type="button">Go!</button>
                                 </div>
                             </div>
+                        </div>
                         <div class="form-group interval-srch" style="display: none;">
-                                <div class="input-group">
-                                    <input type="number" maxlength="5" class="form-control mr-1" id="srch-minVal" name="srch-minVal" placeholder="From" required>
-                                    <input type="number" maxlength="5" class="form-control" id="srch-maxVal" name="srch-maxVal" placeholder="To" required>
-                                    <div class="input-group-prepend">
-                                        <button class="btn btn-outline-secondary" type="button">Go!</button>
-                                    </div>
+                            <div class="input-group">
+                                <input type="number" maxlength="5" class="form-control mr-1" id="srch-minVal" name="srch-minVal"
+                                    placeholder="From" required autofocus>
+                                <input type="number" maxlength="5" class="form-control" id="srch-maxVal" name="srch-maxVal"
+                                    placeholder="To" required>
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-outline-secondary srch-btn" type="button">Go!</button>
                                 </div>
                             </div>
+                        </div>
                     </form>
                 </div>
             </div>
