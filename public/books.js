@@ -32,10 +32,10 @@ async function getBookByTitle(...args) {
 
 async function getBookByYear(...args) {
     return await $.ajax({
-        url: '/json/books/year/from/' + args[0] + '/to/' + args[1],
+        url: '/json/books/year/from/' + args[0][0] + '/to/' + args[0][1],
         method: 'GET',
         contentType: 'application/json'
-    }).catch(err => console.error(err));
+    }).catch(console.log(args));
 }
 
 async function createNewBook(book) {

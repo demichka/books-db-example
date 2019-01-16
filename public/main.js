@@ -166,18 +166,8 @@ $('#srch-type-select').change(function () {
 
 let processSearch = (type, value) => {
     let book = {};
-    if(type === 'srch-year') {
-        book = getBookByYear(value);
-    }
-
-    return book;
-};
-
-let processSimpleSearch = (type, value) => {
-    let book = {};
     if (type === 'srch-id') {
-        book = getBookById(value);
-        console.log(book, 'book by id');
+        book = getBookById(value[0]);
     }
     if(type === 'srch-author') {
         book = getBookByAuthor(value);
@@ -185,6 +175,11 @@ let processSimpleSearch = (type, value) => {
     if(type === 'srch-title') {
         book = getBookByTitle(value);
     }
+
+    if(type === 'srch-year') {
+        book = getBookByYear(value);
+    }
+
     return book;
 };
 
@@ -193,23 +188,22 @@ $('.srch-btn').on('click', async (e) => {
     let form = btn.parents('form');
     let type = form.find('option:selected').val();
     let value = [];
-    let books = [];
     if (type === 'srch-id' ||
         type === 'srch-author' ||
         type === 'srch-title' ||
         type === 'src-country'
     ) {
-        value = $('#srch-input').val();
+        value.push($('#srch-input').val());
         console.log(value);
-        books = await processSimpleSearch(type, value); 
-
     }
     if (type === 'srch-year' ||
         type === 'srch-pages'
     ) {
-        value.push($('#srch-minVal').val(), $('#srch-minVal').val());
+        await value.push($('#srch-minVal').val(), $('#srch-maxVal').val());
+        console.log(value);
     }
 
+    let books = await processSearch(type, value); 
     console.log(books);
     if (books.length > 0) {
         $('.books-wrap').empty();
@@ -223,14 +217,16 @@ $('.srch-btn').on('click', async (e) => {
         form.find('.form-group').hide();
         btn.parents('.modal').modal('hide');
     }
-    // else {
-    //     let alert = form.find('.alert');
-    //     alert.fadeIn();
-    //     setTimeout(() => {
-    //         alert.slideUp();
-    //     }, 2000);
+    else {
+        let alert = form.find('.alert');
+        alert.fadeIn();
+        form[0].reset();
+            form.find('.form-group').slideUp();
+        setTimeout(() => {
+            alert.slideUp();
+        }, 2000);
 
-    // }
+    }
     //5c387c7ceb2bc8092048b528
 
 });
