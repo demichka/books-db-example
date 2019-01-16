@@ -6,9 +6,33 @@ async function getBooks() {
     }).catch(err => console.error(err));
 }
 
-async function getBook(id) {
+async function getBookById(id) {
     return await $.ajax({
         url: '/json/books/id/' + id,
+        method: 'GET',
+        contentType: 'application/json'
+    }).catch(err => console.error(err));
+}
+
+async function getBookByAuthor(...args) {
+    return await $.ajax({
+        url: '/json/books/author/' + args[0],
+        method: 'GET',
+        contentType: 'application/json'
+    }).catch(err => console.error(err));
+}
+
+async function getBookByTitle(...args) {
+    return await $.ajax({
+        url: '/json/books/title/' + args[0],
+        method: 'GET',
+        contentType: 'application/json'
+    }).catch(err => console.error(err));
+}
+
+async function getBookByYear(...args) {
+    return await $.ajax({
+        url: '/json/books/year/from/' + args[0] + '/to/' + args[1],
         method: 'GET',
         contentType: 'application/json'
     }).catch(err => console.error(err));
