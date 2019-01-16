@@ -28,9 +28,10 @@
             </div>
             <div class="col-12 text-center">
                 <button type="button" class="btn btn-raised btn-primary get-books">Get books</button>
-                <button type="button" class="btn btn-raised btn-success add-book" data-toggle="modal" data-target="#form-modal" data-event="addBook">Add
+                <button type="button" class="btn btn-raised btn-success add-book" data-toggle="modal" data-target="#form-modal"
+                    data-event="addBook">Add
                     book</button>
-                <button type="button" class="btn btn-raised btn-info search-book">Search book</button>
+                <button type="button" class="btn btn-raised btn-info search-book" data-toggle="modal" data-target="#search-modal">Search book</button>
 
             </div>
         </div>
@@ -100,28 +101,58 @@
             </div>
         </div>
     </div>
-    <div id="update-book-modal" class="modal" tabindex="-1" role="dialog">
+    <div id="search-modal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add Book</h5>
+                    <h5 class="modal-title">Search Book</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <form>
-                        <div class="form-group">
-                            <label for="upd-author">Author</label>
-                            <input type="text" maxlength="30" class="form-control" id="upd-author" placeholder="Update author"
-                                name="upd-author" required>
+                        <select class="custom-select" id="srch-type-select">
+                            <option value="0" selected>Search by</option>
+                            <option value="srch-id">ID</option>
+                            <option value="srch-author">Author</option>
+                            <option value="srch-title">Title</option>
+                            <option value="srch-country">Country</option>
+                            <option value="srch-pages">Pages</option>
+                            <option value="srch-year">Year</option>
+                            <option value="srch-minAge">minAge</option>
+                            <option value="srch-maxAge">maxAge</option>
+                        </select>
+                        <div class="form-group simple-srch" style="display: none;">
+                            <div class="input-group">
+                                <input type="text" maxlength="50" class="form-control" id="srch-input" placeholder="Enter query here"
+                                    name="srch-input" required>
+
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-outline-secondary" type="button">Go!</button>
+                                </div>
+                            </div>
                         </div>
-                        
+                        <div class="form-group numeric-srch" style="display: none;">
+                                <div class="input-group">
+                                    <input type="number" maxlength="5" class="form-control" id="numeric-input" placeholder="Enter number"
+                                        name="numeric-input" required>
+    
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-secondary" type="button">Go!</button>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="form-group interval-srch" style="display: none;">
+                                <div class="input-group">
+                                    <input type="number" maxlength="5" class="form-control mr-1" id="srch-minVal" name="srch-minVal" placeholder="From" required>
+                                    <input type="number" maxlength="5" class="form-control" id="srch-maxVal" name="srch-maxVal" placeholder="To" required>
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-outline-secondary" type="button">Go!</button>
+                                    </div>
+                                </div>
+                            </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="create-book-btn" class="btn btn-primary">Save changes</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
