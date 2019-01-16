@@ -1,7 +1,8 @@
+$(document).ready(function () {
+    $('body').bootstrapMaterialDesign();
+});
 
-$(document).ready(function() { $('body').bootstrapMaterialDesign(); });
-
-$('.get-books').click( async () => {
+$('.get-books').click(async () => {
     let books = await getBooks();
     $('.books-wrap').empty();
     let listBooks = $('<div class="book-list" />');
@@ -13,12 +14,12 @@ $('.get-books').click( async () => {
         div.append($('<p />').html('Year: ' + book.year));
         div.append($('<p />').html('Country: ' + book.country));
         div.append($('<p />').html('Language: ' + book.language));
-        div.append($('<p />').html( 'Pages: ' + book.pages));
-        div.append($('<p />').append($('<a href="' + book.link + '" ' + 'title="'+ book.title + ' by ' + book.author + ' "target="_blank">Learn more</a>')));
-        item.append(div);        
+        div.append($('<p />').html('Pages: ' + book.pages));
+        div.append($('<p />').append($('<a href="' + book.link + '" ' + 'title="' + book.title + ' by ' + book.author + ' "target="_blank">Learn more</a>')));
+        item.append(div);
         item.append($('<div class="col-sm-4"/>').append($('<img src="/book-images/' + book.image + '" class="mw-100 h-auto" />')));
-        let removeBtn = $('<button class="btn btn-raised btn-secondary delete-book mr-1" type="button" data-id="' + book._id +'">Delete</button>');
-        let updateBtn = $('<button class="btn btn-raised btn-warning update-book" type="button" data-event="updateBook" data-id="' + book._id +'">Update</button>');
+        let removeBtn = $('<button class="btn btn-raised btn-secondary delete-book mr-1" type="button" data-id="' + book._id + '">Delete</button>');
+        let updateBtn = $('<button class="btn btn-raised btn-warning update-book" type="button" data-event="updateBook" data-id="' + book._id + '">Update</button>');
         item.append(removeBtn);
         item.append(updateBtn);
         listBooks.append(item);
@@ -27,7 +28,7 @@ $('.get-books').click( async () => {
     $('.books-wrap').append(listBooks);
 });
 
-$('.books-wrap').on('click', '.delete-book', function(e) {
+$('.books-wrap').on('click', '.delete-book', function (e) {
     e.preventDefault();
     let book = $(this).data('id');
     deleteBook(book);
@@ -57,7 +58,7 @@ function submitBookForm(form) {
     return newBook;
 }
 
-function resetForm () {
+function resetForm() {
     $('form')[0].reset();
 }
 
@@ -65,7 +66,7 @@ $('.modal').on('hidden.bs.modal', function (e) {
     resetForm();
 });
 
-$('#form-modal').on('show.bs.modal', function(e) {
+$('#form-modal').on('show.bs.modal', function (e) {
     let btn = $(e.relatedTarget);
     let action = btn.data('event');
     let modalTitle = $(this).find('.modal-title').empty();
@@ -78,7 +79,7 @@ $('#form-modal').on('show.bs.modal', function(e) {
 });
 
 
-$('#create-book-btn').click(function (){
+$('#create-book-btn').click(function () {
     const form = $(this).parents('.modal').find('form');
     let book = submitBookForm(form);
     createNewBook(book);
@@ -86,7 +87,7 @@ $('#create-book-btn').click(function (){
 });
 
 $('.books-wrap').on('click', '.update-book', async (e) => {
-    let id =  $(e.target).data('id');
+    let id = $(e.target).data('id');
     let book = await getBook(id);
     let modal = openUpdateModal(id);
     fillUpdateFormFromDb(book, modal);
@@ -125,4 +126,35 @@ $('#save-updates-btn').on('click', async (e) => {
     updateBook(id, book);
     $('.get-books').click();
     btn.parents('.modal').modal('hide');
+});
+
+let openSearchInputByType = (select) => {
+    let selected = select.find('option:selected').val();
+    return selected ? selected : null;
+};
+
+$('#srch-type-select').change(function () {
+    let searchBy = openSearchInputByType($(this));
+    let form = $(this).parents('form');
+    switch (searchBy) {
+        case 'srch-id':
+        case 'srch-author':
+        case 'srch-title':
+            form.find('.form-group').hide();
+            form.find('.simple-srch').slideDown();
+            break;
+        case 'srch-pages':
+        case 'srch-year':
+            form.find('.form-group').hide();
+            form.find('.interval-srch').slideDown();
+            break;
+            case 'srch-minAge':
+            case 'srch-maxAge':
+            form.find('.form-group').hide();
+            form.find('.numeric-srch').slideDown();
+            break;
+        default:
+            break;
+    }
+
 });
