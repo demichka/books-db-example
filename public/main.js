@@ -94,8 +94,9 @@ $('#create-book-btn').click(function () {
 $('.books-wrap').on('click', '.update-book', async (e) => {
     let id = $(e.target).data('id');
     let book = await getBookById(id);
+    console.log(book);
     let modal = openUpdateModal(id);
-    fillUpdateFormFromDb(book, modal);
+    fillUpdateFormFromDb(book[0], modal);
 });
 
 function openUpdateModal(id) {
@@ -124,7 +125,6 @@ function fillUpdateFormFromDb(book, modal) {
 $('#save-updates-btn').on('click', async (e) => {
     let btn = $(e.target);
     let form = btn.parents('.modal').find('form');
-    console.log(form);
     let id = btn.data('id');
     let book = submitBookForm(form);
     console.log(book);
@@ -166,20 +166,36 @@ $('#srch-type-select').change(function () {
 
 let processSearch = (type, value) => {
     let book = {};
-    if (type === 'srch-id') {
-        book = getBookById(value[0]);
+    switch (type) {
+        case 'srch-id':
+            book = getBookById(value[0]);
+            break;
+        case 'srch-author':
+            book = getBookByAuthor(value);
+            break;
+        case 'srch-title':
+            book = getBookByTitle(value);
+            break;
+        case 'srch-country':
+            book = getBookByCountry(value);
+            break;
+        case 'srch-year':
+            book = getBookByYear(value);
+            break;
+        case 'srch-pages':
+            book = getBookByPages(value);
+            break;
+        case 'srch-minAge':
+            book = getBookByMinAge(value);
+            break;
+        case 'srch-maxAge':
+            book = getBookByMaxAge(value);
+            break;
+        default:
+            {
+                return;
+            }
     }
-    if(type === 'srch-author') {
-        book = getBookByAuthor(value);
-    }
-    if(type === 'srch-title') {
-        book = getBookByTitle(value);
-    }
-
-    if(type === 'srch-year') {
-        book = getBookByYear(value);
-    }
-
     return book;
 };
 
@@ -191,37 +207,45 @@ $('.srch-btn').on('click', async (e) => {
     if (type === 'srch-id' ||
         type === 'srch-author' ||
         type === 'srch-title' ||
-        type === 'src-country'
+        type === 'srch-country'
     ) {
-        value.push($('#srch-input').val());
-        console.log(value);
+        let key = $('#srch-input').val();
+        await value.push(key);
     }
     if (type === 'srch-year' ||
         type === 'srch-pages'
     ) {
-        await value.push($('#srch-minVal').val(), $('#srch-maxVal').val());
-        console.log(value);
+        let minVal = $('#srch-minVal').val();
+        let maxVal = $('#srch-maxVal').val();
+        value = {
+            minVal: minVal,
+            maxVal: maxVal
+        };
+    }
+    if (type === 'srch-minAge' ||
+        type === 'srch-maxAge'
+    ) {
+        let key = $('#numeric-input').val();
+        value.push(key);
     }
 
-    let books = await processSearch(type, value); 
-    console.log(books);
+    let books = await processSearch(type, value);
     if (books.length > 0) {
         $('.books-wrap').empty();
         for (let i = 0; i < books.length; i++) {
             let book = books[i];
-            let bookHtml = createBookMarkup(book);    
+            let bookHtml = createBookMarkup(book);
             $('.books-wrap').append(bookHtml);
         }
         form[0].reset();
         value.length = 0;
         form.find('.form-group').hide();
         btn.parents('.modal').modal('hide');
-    }
-    else {
+    } else {
         let alert = form.find('.alert');
         alert.fadeIn();
         form[0].reset();
-            form.find('.form-group').slideUp();
+        form.find('.form-group').slideUp();
         setTimeout(() => {
             alert.slideUp();
         }, 2000);
