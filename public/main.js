@@ -13,8 +13,8 @@ let createBookMarkup = (book) => {
     div.append($('<p />').html('Pages: ' + book.pages));
     div.append($('<p />').append($('<a href="' + book.link + '" ' + 'title="' + book.title + ' by ' + book.author + ' "target="_blank">Learn more</a>')));
     item.append(div);
-    item.append($('<div class="col-sm-4"/>').append($('<img src="/book-images/' + book.image + '" class="mw-100 h-auto" />')));
-    let removeBtn = $('<button class="btn btn-raised btn-secondary delete-book mr-1" type="button" data-id="' + book._id + '">Delete</button>');
+    item.append($('<div class="col-sm-4 mb-2"/>').append($('<img src="/book-images/' + book.image + '" class="mw-100 h-auto" />')));
+    let removeBtn = $('<button class="btn btn-raised btn-secondary delete-book mr-2 ml-3" type="button" data-id="' + book._id + '">Delete</button>');
     let updateBtn = $('<button class="btn btn-raised btn-warning update-book" type="button" data-event="updateBook" data-id="' + book._id + '">Update</button>');
     item.append(removeBtn);
     item.append(updateBtn);
