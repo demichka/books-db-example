@@ -75,7 +75,7 @@ $('#form-modal').on('show.bs.modal', function (e) {
     let btn = $(e.relatedTarget);
     let action = btn.data('event');
     let modalTitle = $(this).find('.modal-title').empty();
-    let btns = $(this).find($('.modal-footer').find('button'));
+    let btns = $(this).find($('.form-footer').find('button'));
     btns.hide();
     if (action === 'addBook') {
         modalTitle.html('Add new book');
@@ -96,7 +96,7 @@ $('.books-wrap').on('click', '.update-book', async (e) => {
     let book = await getBookById(id);
     console.log(book);
     let modal = openUpdateModal(id);
-    fillUpdateFormFromDb(book[0], modal);
+    fillUpdateFormFromDb(book, modal);
 });
 
 function openUpdateModal(id) {
@@ -164,39 +164,29 @@ $('#srch-type-select').change(function () {
     }
 });
 
-let processSearch = (type, value) => {
-    let book = {};
+let processSearch = async (type, value) => {
+    let book;
     switch (type) {
         case 'srch-id':
-            book = getBookById(value[0]);
-            break;
+            book = await getBookById(value[0]);
+            return book ? [book] : [];
         case 'srch-author':
-            book = getBookByAuthor(value);
-            break;
+            return await getBookByAuthor(value);
         case 'srch-title':
-            book = getBookByTitle(value);
-            break;
+            return await getBookByTitle(value);
         case 'srch-country':
-            book = getBookByCountry(value);
-            break;
+            return await getBookByCountry(value);
         case 'srch-year':
-            book = getBookByYear(value);
-            break;
+            return await getBookByYear(value);
         case 'srch-pages':
-            book = getBookByPages(value);
-            break;
+            return await getBookByPages(value);
         case 'srch-minAge':
-            book = getBookByMinAge(value);
-            break;
+            return await getBookByMinAge(value);
         case 'srch-maxAge':
-            book = getBookByMaxAge(value);
-            break;
+            return await getBookByMaxAge(value);
         default:
-            {
-                return;
-            }
+            return;
     }
-    return book;
 };
 
 $('.srch-btn').on('click', async (e) => {
@@ -230,7 +220,7 @@ $('.srch-btn').on('click', async (e) => {
     }
 
     let books = await processSearch(type, value);
-    if (books.length > 0) {
+    if ( books && books.length > 0) {
         $('.books-wrap').empty();
         for (let i = 0; i < books.length; i++) {
             let book = books[i];

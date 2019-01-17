@@ -35,7 +35,7 @@ function startWebServer() {
     });
 
     app.get('/json/books/id/:id', async (req, res) => {
-        let book = await Book.find({
+        let book = await Book.findOne({
             _id: req.params.id
         }).catch((err) => {
             // Catching here to prevent server crash
